@@ -43,6 +43,7 @@ public class Main {
 		}catch(IOException e) {
 			System.out.println("Ha ocurrido una excepcion de tipo IO: "+e);
 		}
+
 		String[][] direction = new String[ciudades.size()][ciudades.size()];
 		int[][] distance = new int[ciudades.size()][ciudades.size()];
 		//Inicializador de matriz de direcciones
@@ -75,13 +76,22 @@ public class Main {
 				}
 			}
 		}
+		/*
+		
+		USANDO LA MATRIZ DE DISTANCIAS PARA PODER APLICAR FLOYD 	
+		
+		*/
+
+		Floyd floyd = new Floyd(distance);
+
+
 		//generador de mapa de abreviaciones
 		for(int i=0;i<ciudades.size();i++) {
 			abrev_city.put(ciudades.get(i).substring(0,1),ciudades.get(i));
 			city_abrev.put(ciudades.get(i),ciudades.get(i).substring(0,1));
 		}
 		
-		
+		/*
 		//imprimir matrices
 		//matriz de distancia
 		for(int y=0;y<ciudades.size()+1;y++) {
@@ -125,6 +135,6 @@ public class Main {
 			}
 			System.out.print("\n");
 		}
+		*/
 	}
-
 }
