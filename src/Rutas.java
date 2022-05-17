@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Rutas {
     private ArrayList<String> ciudades;
@@ -12,6 +13,9 @@ public class Rutas {
 
     private String[][] direction;
     private int[][] distance;
+
+    private String start;
+    private String end;
 
     public Rutas() {
         ciudades = new ArrayList<String>();
@@ -35,6 +39,22 @@ public class Rutas {
         printDistMatrix();
         // matriz de direccion
         printDirectionMatrix();
+
+        // MOSTRANDO AL USUARIO
+        sep();
+        prnt("Bienvenido al Centro de Respuesta al COVID 19");
+        prnt("Coordinemos la logistica de distribucion...");
+        sep();
+
+        // TRABAJO CON LAS RUTAS
+
+        getRoute(); // OPCION 1
+        // OPCION 2?
+        modifyGraphs(); // OPCION 3
+
+        prnt("Exitos en la distribucion. Adios.");
+        sep();
+
     }
 
     private void readDataFromFile() {
@@ -147,5 +167,31 @@ public class Rutas {
             System.out.print("\n");
         }
         System.out.print("\n");
+    }
+
+    private void prnt(String text){
+        System.out.println(text);
+    }
+
+    private void sep(){
+        prnt("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    private void getRoute(){
+        Scanner scan = new Scanner(System.in);
+        prnt("Ingrese la ciudad de origen:");
+        start = scan.nextLine();
+        prnt("Ingrese la ciudad destino:");
+        end = scan.nextLine();
+        // VERIFICAR QUE LAS CIUDADES EXISTEN
+        // MOSTRAR EL VLAOR DE LA DISTANCIA MÁS CORTA
+        // MOSTRAR LAS CIUDADES POR LAS QUE PASA
+        sep();
+    }
+
+    private void modifyGraphs(){
+
+
+        sep();
     }
 }
