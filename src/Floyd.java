@@ -5,12 +5,11 @@
 public class Floyd {
     private int[][] matrix;
     private int vertices;
-    private static int inf = 99999;
 
     public Floyd(int[][] matrix){
         this.matrix = matrix;
         System.out.print(matrix.length);
-        floyd();
+        findDistance();
     }
 
     
@@ -18,7 +17,7 @@ public class Floyd {
      * Implementation of Floyd Warshall Algorithm
      * Source: Geeks4Geeks https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
      */
-    private void floyd(){
+    public void findDistance(){
         int[][] dist = new int[vertices][vertices];
         int i, j, k;
 
@@ -37,11 +36,9 @@ public class Floyd {
                 }
             }
         }
-
-        printSolution(dist);
     }
 
-    private void printSolution(int dist[][])
+    public void printDistances()
     {
         System.out.println("The following matrix shows the shortest "+
                          "distances between every pair of vertices");
@@ -49,10 +46,10 @@ public class Floyd {
         {
             for (int j=0; j<vertices; ++j)
             {
-                if (dist[i][j]== -1)
+                if (matrix[i][j]== -1)
                     System.out.print("INF ");
                 else
-                    System.out.print(dist[i][j]+"   ");
+                    System.out.print(matrix[i][j]+"   ");
             }
             System.out.println();
         }

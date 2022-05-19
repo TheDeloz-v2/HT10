@@ -10,6 +10,8 @@ public class Rutas {
     private ArrayList<String> trayect;
     private HashMap<String, String> abrev_city;
     private HashMap<String, String> city_abrev;
+    private int size;
+    private final int inf = 999999;
 
     private String[][] direction;
     private int[][] distance;
@@ -25,20 +27,23 @@ public class Rutas {
     }
 
     public void execute() {
-        readDataFromFile();
+        readCitiesFromFile();
         // Inicializador de matrices
         createDirectionMatrix();
         createDistMatrix();
-
-        // Floyd floyd = new Floyd(distance);
-
+/*
+        Floyd floyd = new Floyd(distance);
+        sep();
+        floyd.printDistances();
+        sep();
+*/
         // generador de mapa de abreviaciones
         createAbbreviations();
 
         // MATRIZ DE DISTANCIA
-        printDistMatrix();
+        printMatrix(distance);
         // matriz de direccion
-        printDirectionMatrix();
+        printMatrix(direction);
 
         // MOSTRANDO AL USUARIO
         sep();
@@ -57,7 +62,10 @@ public class Rutas {
 
     }
 
-    private void readDataFromFile() {
+    /**
+     * Saves the name and amount of cities in the given file
+     */
+    private void readCitiesFromFile() {
         try {
             FileReader r = new FileReader("guategrafo.txt");
             BufferedReader br = new BufferedReader(r);
@@ -80,13 +88,14 @@ public class Rutas {
             System.out.println("Ha ocurrido una excepcion de tipo IO: " + e);
         }
 
-        direction = new String[ciudades.size()][ciudades.size()];
-        distance = new int[ciudades.size()][ciudades.size()];
+        size = ciudades.size(); // SETS SIZE VARIABLE FOR ENVIRNOMENT
+        direction = new String[size][size];
+        distance = new int[size][size];
     }
 
     private void createDirectionMatrix() {
-        for (int x = 0; x < ciudades.size(); x++) {
-            for (int y = 0; y < ciudades.size(); y++) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 if (x == y) {
                     direction[x][y] = null;
                 } else {
@@ -97,8 +106,8 @@ public class Rutas {
     }
 
     private void createDistMatrix(){
-        for (int x = 0; x < ciudades.size(); x++) {
-            for (int y = 0; y < ciudades.size(); y++) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 if (x == y) {
                     distance[x][y] = 0;
                 } else {
@@ -110,9 +119,16 @@ public class Rutas {
                         if (c.contains(ciudades.get(x)) && c.contains(ciudades.get(y))) {
                             distance[x][y] = Integer.parseInt(d);
                         } else {
-                            distance[x][y] = -1;
+                            distance[x][y] = inf;
                         }
                     }
+                    /*
+                    if (ciudades.contains(datos[0]) && ciudades.contains(datos[1])) {
+                            distance[x][y] = Integer.parseInt(datos[2]);
+                        } else {
+                            distance[x][y] = inf;
+                        }
+                    */
                 }
             }
         }
@@ -125,7 +141,7 @@ public class Rutas {
         }
     }
 
-    private void printDistMatrix() {
+    private void printMatrix(int[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
                 if (y == 0) {
@@ -138,7 +154,7 @@ public class Rutas {
                     if (x == 0) {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
-                        System.out.print(distance[x - 1][y - 1] + "\t");
+                        System.out.print(matrix[x - 1][y - 1] + "\t");
                     }
                 }
             }
@@ -147,7 +163,7 @@ public class Rutas {
         System.out.print("\n");
     }
 
-    private void printDirectionMatrix() {
+    private void printMatrix(String[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
                 if (y == 0) {
@@ -160,7 +176,7 @@ public class Rutas {
                     if (x == 0) {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
-                        System.out.print(direction[x - 1][y - 1] + "\t");
+                        System.out.print(matrix[x - 1][y - 1] + "\t");
                     }
                 }
             }
