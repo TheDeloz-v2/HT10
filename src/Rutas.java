@@ -42,6 +42,7 @@ public class Rutas {
 
         // MATRIZ DE DISTANCIA
         printMatrix(distance);
+
         // matriz de direccion
         printMatrix(direction);
 
@@ -104,43 +105,29 @@ public class Rutas {
             }
         }
     }
-
     private void createDistMatrix(){
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 if (x == y) {
                     distance[x][y] = 0;
                 } else {
-                    for (int i = 0; i < trayect.size(); i++) {
-                        String[] datos;
-                        datos = trayect.get(x).split(" ");
-                        String c = datos[0] + " " + datos[1];
-                        String d = datos[2];
-                        if (c.contains(ciudades.get(x)) && c.contains(ciudades.get(y))) {
-                            distance[x][y] = Integer.parseInt(d);
-                        } else {
-                            distance[x][y] = inf;
-                        }
-                    }
-                    /*
-                    if (ciudades.contains(datos[0]) && ciudades.contains(datos[1])) {
-                            distance[x][y] = Integer.parseInt(datos[2]);
-                        } else {
-                            distance[x][y] = inf;
-                        }
-                    */
+                    distance[x][y] = inf;
                 }
+            }
+            for (String line : trayect) {
+                String [] data = line.split(" ");
+                int posY = ciudades.indexOf(data[0]);
+                int posX = ciudades.indexOf(data[1]);
+                distance[posX][posY] = Integer.parseInt(data[2]);
             }
         }
     }
-
     private void createAbbreviations(){
         for (int i = 0; i < ciudades.size(); i++) {
             abrev_city.put(ciudades.get(i).substring(0, 1), ciudades.get(i));
             city_abrev.put(ciudades.get(i), ciudades.get(i).substring(0, 1));
         }
     }
-
     private void printMatrix(int[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -154,7 +141,12 @@ public class Rutas {
                     if (x == 0) {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
-                        System.out.print(matrix[x - 1][y - 1] + "\t");
+                        int d = matrix[x - 1][y - 1];
+                        if(d == inf){
+                            System.out.print("INF\t");
+                        }else{
+                            System.out.print(d + "\t");
+                        }
                     }
                 }
             }
@@ -162,7 +154,6 @@ public class Rutas {
         }
         System.out.print("\n");
     }
-
     private void printMatrix(String[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -176,7 +167,12 @@ public class Rutas {
                     if (x == 0) {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
-                        System.out.print(matrix[x - 1][y - 1] + "\t");
+                        String d = matrix[x - 1][y - 1];
+                        if(d == null){
+                            System.out.print("-\t");
+                        }else{
+                            System.out.print(d + "\t");
+                        }
                     }
                 }
             }
@@ -184,25 +180,31 @@ public class Rutas {
         }
         System.out.print("\n");
     }
-
     private void prnt(String text){
         System.out.println(text);
     }
-
     private void sep(){
         prnt("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
-
     private void getRoute(){
         Scanner scan = new Scanner(System.in);
         prnt("Ingrese la ciudad de origen:");
         start = scan.nextLine();
         prnt("Ingrese la ciudad destino:");
         end = scan.nextLine();
-        // VERIFICAR QUE LAS CIUDADES EXISTEN
-        // MOSTRAR EL VLAOR DE LA DISTANCIA MÁS CORTA
-        // MOSTRAR LAS CIUDADES POR LAS QUE PASA
         sep();
+        // TO CHECK IF CITIES EXIST
+        if(!(ciudades.contains(start) && ciudades.contains(end))){
+            prnt("NO HAY UNA RUTA EXISTENTE PARA: " + start + " -> " + end);
+        }
+        else{
+            prnt("PREPARANDO RUTA: " + start + " -> " + end);
+            // MOSTRAR EL VLAOR DE LA DISTANCIA MÁS CORTA
+            // MOSTRAR LAS CIUDADES POR LAS QUE PASA
+            sep();
+            scan.close();
+        } 
+        
     }
 
     private void modifyGraphs(){

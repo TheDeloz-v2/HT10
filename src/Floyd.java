@@ -46,7 +46,7 @@ public class Floyd {
         {
             for (int j=0; j<vertices; ++j)
             {
-                if (matrix[i][j]== -1)
+                if (matrix[i][j]== 999999)
                     System.out.print("INF ");
                 else
                     System.out.print(matrix[i][j]+"   ");
