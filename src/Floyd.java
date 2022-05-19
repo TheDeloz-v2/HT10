@@ -1,17 +1,33 @@
 /**
- * @author Andres
- *
+ * Class Floyd
+ * 
+ * Clase para la implementacion del algoritmo de Floyd Warshall.
+ * 
+ * @version 1.0, 18/05/2022
+ * 
+ * @author 
+ * Andres E. Montoya - 21552
+ * Diego E. Lemus - 21469
+ * Fernanda Esquivel - 21542
+ * Francisco J. Castillo - 21562
  */
+
 public class Floyd {
+
+    //-----PROPIEDADES-----
     private int[][] matrix;
     private int vertices;
 
+    //-----METODOS-----
+    /**
+	 * Metodo Constructor
+	 * @param int[][] matrix
+	 */
     public Floyd(int[][] matrix){
         this.matrix = matrix;
         System.out.print(matrix.length);
         findDistance();
     }
-
     
     /**
      * Implementation of Floyd Warshall Algorithm
@@ -38,6 +54,9 @@ public class Floyd {
         }
     }
 
+    /**
+     * Impresion de las distancias entre vertices.
+     */
     public void printDistances()
     {
         System.out.println("The following matrix shows the shortest "+

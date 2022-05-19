@@ -5,7 +5,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * Class Floyd
+ * 
+ * Clase para la implementacion del algoritmo de Floyd Warshall.
+ * 
+ * @version 1.0, 18/05/2022
+ * 
+ * @author 
+ * Andres E. Montoya - 21552
+ * Diego E. Lemus - 21469
+ * Fernanda Esquivel - 21542
+ * Francisco J. Castillo - 21562
+ */
+
 public class Rutas {
+
+    //-----PROPIEDADES-----
     private ArrayList<String> ciudades;
     private ArrayList<String> trayect;
     private HashMap<String, String> abrev_city;
@@ -19,6 +35,10 @@ public class Rutas {
     private String start;
     private String end;
 
+    //-----METODOS-----
+    /**
+	 * Metodo Constructor
+	 */
     public Rutas() {
         ciudades = new ArrayList<String>();
         trayect = new ArrayList<String>();
@@ -26,6 +46,9 @@ public class Rutas {
         city_abrev = new HashMap<String, String>();
     }
 
+    /**
+	 * Metodo de ejecucion
+	 */
     public void execute() {
         readCitiesFromFile();
         // Inicializador de matrices
@@ -94,6 +117,9 @@ public class Rutas {
         distance = new int[size][size];
     }
 
+    /**
+	 * Metodo para la creacion de direccion de la ruta
+	 */
     private void createDirectionMatrix() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -105,6 +131,10 @@ public class Rutas {
             }
         }
     }
+
+    /**
+	 * Metodo para la creacion de distancia de la ruta
+	 */
     private void createDistMatrix(){
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -122,12 +152,20 @@ public class Rutas {
             }
         }
     }
+
+    /**
+	 * Metodo para la creacion de abreviaturas
+	 */
     private void createAbbreviations(){
         for (int i = 0; i < ciudades.size(); i++) {
             abrev_city.put(ciudades.get(i).substring(0, 1), ciudades.get(i));
             city_abrev.put(ciudades.get(i), ciudades.get(i).substring(0, 1));
         }
     }
+
+    /**
+	 * Metodo para la impresion de la matriz
+	 */
     private void printMatrix(int[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -154,6 +192,11 @@ public class Rutas {
         }
         System.out.print("\n");
     }
+
+    /**
+	 * Metodo para la impresion de la matriz
+     * @param String[][] matrix
+	 */
     private void printMatrix(String[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -180,12 +223,24 @@ public class Rutas {
         }
         System.out.print("\n");
     }
+
+    /**
+	 * Metodo para la impresion de texto
+	 */
     private void prnt(String text){
         System.out.println(text);
     }
+
+    /**
+	 * Metodo para la impresion de separador
+	 */
     private void sep(){
         prnt("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
+
+    /**
+	 * Metodo para la obtencion de la ruta
+	 */
     private void getRoute(){
         Scanner scan = new Scanner(System.in);
         prnt("Ingrese la ciudad de origen:");
@@ -207,6 +262,9 @@ public class Rutas {
         
     }
 
+    /**
+	 * Metodo para la modificaciob del grafo
+	 */
     private void modifyGraphs(){
 
 
