@@ -12,16 +12,18 @@ import java.util.Scanner;
  * 
  * @version 1.0, 18/05/2022
  * 
- * @author 
- * Andres E. Montoya - 21552
- * Diego E. Lemus - 21469
- * Fernanda Esquivel - 21542
- * Francisco J. Castillo - 21562
+ * @author
+ *         Andres E. Montoya - 21552
+ *         Diego E. Lemus - 21469
+ *         Fernanda Esquivel - 21542
+ *         Francisco J. Castillo - 21562
  */
 
 public class Rutas {
 
-    //-----PROPIEDADES-----
+    // -----PROPIEDADES-----
+    private Scanner scan;
+
     private ArrayList<String> ciudades;
     private ArrayList<String> trayect;
     private HashMap<String, String> abrev_city;
@@ -35,11 +37,13 @@ public class Rutas {
     private String start;
     private String end;
 
-    //-----METODOS-----
+    // -----METODOS-----
     /**
-	 * Metodo Constructor
-	 */
+     * Metodo Constructor
+     */
     public Rutas() {
+        scan  = new Scanner(System.in);
+        
         ciudades = new ArrayList<String>();
         trayect = new ArrayList<String>();
         abrev_city = new HashMap<String, String>();
@@ -47,8 +51,8 @@ public class Rutas {
     }
 
     /**
-	 * Metodo de ejecucion
-	 */
+     * Metodo de ejecucion
+     */
     public void execute() {
         readCitiesFromFile();
         // Inicializador de matrices
@@ -57,7 +61,7 @@ public class Rutas {
 
         // generador de mapa de abreviaciones
         createAbbreviations();
-        
+
         // MATRIZ DE DISTANCIA
         sep();
         prnt("                Matriz de distancia   ");
@@ -72,7 +76,7 @@ public class Rutas {
 
         Floyd floyd = new Floyd(distance);
         sep();
-        prnt("                 Matriz de Floyd   ");
+        prnt("                Matriz de Floyd   ");
         sep();
         printMatrix(floyd.getMatrix());
         sep();
@@ -82,12 +86,29 @@ public class Rutas {
         prnt("Coordinemos la logistica de distribucion...");
         sep();
 
-        // TRABAJO CON LAS RUTAS
-
-        getRoute(); // OPCION 1
-        // OPCION 2?
-        modifyGraphs(); // OPCION 3
-
+        boolean end = false;
+        while (!end) {
+            if(getRoute()){ // OPCION 1
+                sep();
+                // CENTRO DEL GRAFO
+                sep();
+                modifyGraphs(); // OPCION 3
+                sep();
+            }
+            boolean goodInput = false;
+            while(!goodInput){
+                prnt("Desea verificar otro proceso? S/N");
+                String input = scan.nextLine().toUpperCase();
+                if(input.equals("N")){
+                    goodInput = true;
+                    end = true;
+                }
+                if(input.equals("S")){
+                    goodInput = true;
+                }
+            }
+        }
+        scan.close();
         prnt("Exitos en la distribucion. Adios.");
         sep();
 
@@ -125,8 +146,8 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la creacion de direccion de la ruta
-	 */
+     * Metodo para la creacion de direccion de la ruta
+     */
     private void createDirectionMatrix() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -140,9 +161,9 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la creacion de distancia de la ruta
-	 */
-    private void createDistMatrix(){
+     * Metodo para la creacion de distancia de la ruta
+     */
+    private void createDistMatrix() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 if (x == y) {
@@ -152,7 +173,7 @@ public class Rutas {
                 }
             }
             for (String line : trayect) {
-                String [] data = line.split(" ");
+                String[] data = line.split(" ");
                 int posY = ciudades.indexOf(data[0]);
                 int posX = ciudades.indexOf(data[1]);
                 distance[posX][posY] = Integer.parseInt(data[2]);
@@ -162,9 +183,9 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la creacion de abreviaturas
-	 */
-    private void createAbbreviations(){
+     * Metodo para la creacion de abreviaturas
+     */
+    private void createAbbreviations() {
         for (int i = 0; i < ciudades.size(); i++) {
             abrev_city.put(ciudades.get(i).substring(0, 1), ciudades.get(i));
             city_abrev.put(ciudades.get(i), ciudades.get(i).substring(0, 1));
@@ -172,8 +193,8 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la impresion de la matriz
-	 */
+     * Metodo para la impresion de la matriz
+     */
     private void printMatrix(int[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -188,9 +209,9 @@ public class Rutas {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
                         int d = matrix[x - 1][y - 1];
-                        if(d == inf){
+                        if (d == inf) {
                             System.out.print("INF\t");
-                        }else{
+                        } else {
                             System.out.print(d + "\t");
                         }
                     }
@@ -202,9 +223,10 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la impresion de la matriz
+     * Metodo para la impresion de la matriz
+     * 
      * @param String[][] matrix
-	 */
+     */
     private void printMatrix(String[][] matrix) {
         for (int y = 0; y < ciudades.size() + 1; y++) {
             for (int x = 0; x < ciudades.size() + 1; x++) {
@@ -219,9 +241,9 @@ public class Rutas {
                         System.out.print(city_abrev.get(ciudades.get(y - 1)) + "\t");
                     } else {
                         String d = matrix[x - 1][y - 1];
-                        if(d == null){
+                        if (d == null) {
                             System.out.print("-\t");
-                        }else{
+                        } else {
                             System.out.print(d + "\t");
                         }
                     }
@@ -233,34 +255,33 @@ public class Rutas {
     }
 
     /**
-	 * Metodo para la impresion de texto
-	 */
-    private void prnt(String text){
+     * Metodo para la impresion de texto
+     */
+    private void prnt(String text) {
         System.out.println(text);
     }
 
     /**
-	 * Metodo para la impresion de separador
-	 */
-    private void sep(){
+     * Metodo para la impresion de separador
+     */
+    private void sep() {
         prnt("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     /**
-	 * Metodo para la obtencion de la ruta
-	 */
-    private void getRoute(){
-        Scanner scan = new Scanner(System.in);
+     * Metodo para la obtencion de la ruta
+     */
+    private boolean getRoute() {
         prnt("Ingrese la ciudad de origen:");
         start = scan.nextLine();
         prnt("Ingrese la ciudad destino:");
         end = scan.nextLine();
         sep();
         // TO CHECK IF CITIES EXIST
-        if(!(ciudades.contains(start) && ciudades.contains(end))){
+        if (!(ciudades.contains(start) && ciudades.contains(end))) {
             prnt("NO HAY UNA RUTA EXISTENTE PARA: " + start + " -> " + end);
-        }
-        else{
+            return false;
+        } else {
             prnt("PREPARANDO RUTA: " + start + " -> " + end);
             // MOSTRAR EL VLAOR DE LA DISTANCIA MÃ�S CORTA
             // MOSTRAR LAS CIUDADES POR LAS QUE PASA
@@ -268,16 +289,15 @@ public class Rutas {
             int posX = ciudades.indexOf(end);
             prnt("La distancia entre esas ciudades es de: " + distance[posX][posY] + "km");
             sep();
-            scan.close();
-        } 
-        
+            return true;
+        }
+
     }
 
     /**
-	 * Metodo para la modificaciob del grafo
-	 */
-    private void modifyGraphs(){
-
+     * Metodo para la modificaciob del grafo
+     */
+    private void modifyGraphs() {
 
         sep();
     }
