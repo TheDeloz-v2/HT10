@@ -6,8 +6,7 @@ class RutasTests {
 
 	@Test
 	void modifyTest() {
-		Rutas rts = new Rutas();
-		rts.modifyGraphs();
+		Rutas rts = new Rutas("pruebaGrafo.txt");
 	}
 
 }

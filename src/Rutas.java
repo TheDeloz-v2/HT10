@@ -25,6 +25,7 @@ public class Rutas {
 
     // -----PROPIEDADES-----
     private Scanner scan;
+    private String fileName;
 
     private ArrayList<String> ciudades;
     private ArrayList<String> trayect;
@@ -45,7 +46,8 @@ public class Rutas {
     /**
      * Metodo Constructor
      */
-    public Rutas() {
+    public Rutas(String fileName) {
+        this.fileName = fileName;
         scan = new Scanner(System.in);
 
         ciudades = new ArrayList<String>();
@@ -85,7 +87,7 @@ public class Rutas {
         printMatrix(floyd.getMatrix());
         distanceFloyd = floyd.getMatrix();
         sep();
-        //generador de rutas
+        // generador de rutas
         floyd.inicializar();
         floyd.floydRutas();
         // MOSTRANDO AL USUARIO
@@ -97,30 +99,17 @@ public class Rutas {
         String input = "";
         while (!end) {
             boolean goodInput = false;
-
-            readCitiesFromFile();
-            createDirectionMatrix();
-            createDistMatrix();
-
             getRoute();
-            //generar rutas
-            ruta = floyd.rutas(ciudades.indexOf(start),ciudades.indexOf(this.end));
-            getRutes();
-            
+            // generar rutas
+            if (ciudades.contains(this.start) && ciudades.contains(this.end)) {
+                ruta = floyd.rutas(ciudades.indexOf(start), ciudades.indexOf(this.end));
+                getPath();
+            }
             sep();
             prnt("*CENTRO DEL GRAFO*");// CENTRO DEL GRAFO
             sep();
 
-            while (!goodInput) {
-                prnt("Desea modificar las rutas? S/N");
-                input = scan.nextLine().toUpperCase();
-                if (input.equals("S")) {
-                    modifyGraphs(); // OPCION 3
-                    goodInput = true;
-                } else if (input.equals("N")) {
-                    goodInput = true;
-                }
-            }
+            option3();
 
             goodInput = false;
             while (!goodInput) {
@@ -139,7 +128,6 @@ public class Rutas {
         scan.close();
         prnt("Exitos en la distribucion. Adios.");
         sep();
-
     }
 
     /**
@@ -148,7 +136,7 @@ public class Rutas {
     private void readCitiesFromFile() {
         trayect = new ArrayList<>();
         try {
-            FileReader r = new FileReader("guategrafo.txt");
+            FileReader r = new FileReader(fileName);
             BufferedReader br = new BufferedReader(r);
             String line;
             while ((line = br.readLine()) != null) {
@@ -301,7 +289,7 @@ public class Rutas {
     /**
      * Metodo para la obtencion de la ruta
      */
-    private void getRoute() {
+    public boolean getRoute() {
         prnt("Ingrese la ciudad de origen:");
         start = scan.nextLine();
         prnt("Ingrese la ciudad destino:");
@@ -310,6 +298,8 @@ public class Rutas {
         // TO CHECK IF CITIES EXIST
         if (!(ciudades.contains(start) && ciudades.contains(end))) {
             prnt("NO HAY UNA RUTA EXISTENTE PARA: " + start + " -> " + end);
+
+            return false;
         } else {
             prnt("PREPARANDO RUTA: " + start + " -> " + end);
             // MOSTRAR EL VLAOR DE LA DISTANCIA MÃ�S CORTA
@@ -317,89 +307,119 @@ public class Rutas {
             int posY = ciudades.indexOf(start);
             int posX = ciudades.indexOf(end);
             prnt("La distancia entre esas ciudades es de: " + distanceFloyd[posX][posY] + "km");
+
+            return true;
         }
 
     }
-    private void getRutes() {
-    	int n= ruta.size();
-    	prnt("La más corta a seguir es:");
-        for (int i=0;i<n-1;i++) {
-        	System.out.print(ciudades.get(ruta.get(i))+"->");
+
+    private void getPath() {
+        int n = ruta.size();
+        prnt("La más corta a seguir es:");
+        for (int i = 0; i < n - 1; i++) {
+            System.out.print(ciudades.get(ruta.get(i)) + "->");
         }
-    	System.out.print(ciudades.get(ruta.get(n-1))+"\n");
+        System.out.print(ciudades.get(ruta.get(n - 1)) + "\n");
     }
 
-    /**
-     * Metodo para la modificaciob del grafo
-     */
-    public void modifyGraphs() {
-        prnt("Que desea hacer?");
-        prnt("1 | Interrupcion de trafico");
-        prnt("2 | Establecer conexion");
-
-        String input = scan.nextLine();
-        int option = -1;
+    private void option3() {
         boolean goodInput = false;
         while (!goodInput) {
-            try {
-                option = Integer.parseInt(input);
-                if (option == 1 || option == 2) {
-                    goodInput = true;
+            prnt("Desea modificar las rutas? S/N");
+            String input = scan.nextLine().toUpperCase();
+            if (input.equals("S")) {
+                prnt("Que desea hacer?");
+                prnt("1 | Interrupcion de trafico");
+                prnt("2 | Establecer conexion");
+
+                String userInput = scan.nextLine();
+                boolean goodSecondInput = false;
+                int option2 = -1;
+                while (!goodSecondInput) {
+                    try {
+                        option2 = Integer.parseInt(userInput);
+                        sep();
+                        if (option2 == 1) {
+                            prnt("REPORTANDO INTERRUPCION");
+                            prnt("Ingrese la ciudad de origen:");
+                            start = scan.nextLine();
+                            prnt("Ingrese la ciudad destino:");
+                            end = scan.nextLine();
+                            deleteRoute(start, end);
+                            goodSecondInput = true;
+                        } else if (option2 == 2) {
+                            prnt("ESTABLECIENDO CONEXION:");
+                            prnt("Ingrese la ciudad de origen:");
+                            start = scan.nextLine();
+                            prnt("Ingrese la ciudad destino:");
+                            end = scan.nextLine();
+
+                            prnt("Ingrese la distancia entre ciudades: (En kilometros, solo el numero)");
+                            int dist = inf;
+                            String distInput = scan.nextLine();
+                            boolean goodInput2 = false;
+                            while (!goodInput2) {
+                                try {
+                                    dist = Integer.parseInt(distInput);
+                                    goodInput2 = true;
+                                } catch (Exception e) {
+                                    prnt("Ingrese una opcion valida");
+                                }
+                            }
+
+                            createRoute(start, end, dist);
+
+                            sep();
+                            goodSecondInput = true;
+                        }
+                    } catch (Exception e) {
+                        prnt("Ingrese una opcion valida");
+                    }
                 }
-            } catch (Exception e) {
-                prnt("Ingrese una opcion valida");
+                sep();
+                goodInput = true;
+            } else if (input.equals("N")) {
+                goodInput = true;
             }
         }
-        sep();
+    }
 
-        if (option == 1) { // ELIMINAR RUTA
-            prnt("REPORTANDO INTERRUPCION");
-            prnt("Ingrese la ciudad de origen:");
-            start = scan.nextLine();
-            prnt("Ingrese la ciudad destino:");
-            end = scan.nextLine();
+    public void createRoute(String start2, String end2, int distance) {
+        String newRoute = start + " " + end + " " + distance;
+        trayect.add(newRoute);
+        rewriteFile();
 
-            if (ciudades.contains(start) && ciudades.contains(end)) {
-                int posY = ciudades.indexOf(start);
-                int posX = ciudades.indexOf(end);
-                int dist = distance[posX][posY];
-                if (dist != inf) {
-                    String search = start + " " + end + " " + dist;
-                    trayect.remove(search);
-                    rewriteFile();
-                } else {
-                    prnt("Esta ruta no existe. No se pueden reportar interrupcion de trafico.");
-                }
+        readCitiesFromFile();
+        createDirectionMatrix();
+        createDistMatrix();
+    }
+
+    public boolean deleteRoute(String start, String end) {
+        if (ciudades.contains(start) && ciudades.contains(end)) {
+            int posY = ciudades.indexOf(start);
+            int posX = ciudades.indexOf(end);
+            int dist = distance[posX][posY];
+            if (dist != inf) {
+                String search = start + " " + end + " " + dist;
+                trayect.remove(search);
+                rewriteFile();
+
+                readCitiesFromFile();
+                createDirectionMatrix();
+                createDistMatrix();
+
+                return true;
             }
-        } else if (option == 2) { // CREAR RUTA
-            prnt("ESTABLECIENDO CONEXION:");
-            prnt("Ingrese la ciudad de origen:");
-            start = scan.nextLine();
-            prnt("Ingrese la ciudad destino:");
-            end = scan.nextLine();
-
-            prnt("Ingrese la distancia entre ciudades: (En kilometros, solo el numero)");
-            int dist = inf;
-            String distInput = scan.nextLine();
-            goodInput = false;
-            while (!goodInput) {
-                try {
-                    dist = Integer.parseInt(distInput);
-                    goodInput = true;
-                } catch (Exception e) {
-                    prnt("Ingrese una opcion valida");
-                }
-            }
-            String newRoute = start + " " + end + " " + dist;
-            trayect.add(newRoute);
-            rewriteFile();
+            return false;
+        } else {
+            prnt("Esta ruta no existe. No se pueden reportar interrupcion de trafico.");
+            return false;
         }
-        sep();
     }
 
     private void rewriteFile() {
         try {
-            FileWriter fw = new FileWriter("guategrafo.txt", false);
+            FileWriter fw = new FileWriter(fileName, false);
 
             for (String line : trayect) {
                 fw.write(line + "\n");
