@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +43,8 @@ public class Rutas {
      * Metodo Constructor
      */
     public Rutas() {
-        scan  = new Scanner(System.in);
-        
+        scan = new Scanner(System.in);
+
         ciudades = new ArrayList<String>();
         trayect = new ArrayList<String>();
         abrev_city = new HashMap<String, String>();
@@ -87,26 +88,44 @@ public class Rutas {
         sep();
 
         boolean end = false;
+        String input = "";
         while (!end) {
-            if(getRoute()){ // OPCION 1
-                sep();
-                // CENTRO DEL GRAFO
-                sep();
-                modifyGraphs(); // OPCION 3
-                sep();
-            }
             boolean goodInput = false;
-            while(!goodInput){
-                prnt("Desea verificar otro proceso? S/N");
-                String input = scan.nextLine().toUpperCase();
-                if(input.equals("N")){
+
+            readCitiesFromFile();
+            createDirectionMatrix();
+            createDistMatrix();
+
+            getRoute();
+
+            sep();
+            prnt("*CENTRO DEL GRAFO*");// CENTRO DEL GRAFO
+            sep();
+
+            while (!goodInput) {
+                prnt("Desea modificar las rutas? S/N");
+                input = scan.nextLine().toUpperCase();
+                if (input.equals("S")) {
+                    modifyGraphs(); // OPCION 3
+                    goodInput = true;
+                } else if (input.equals("N")) {
+                    goodInput = true;
+                }
+            }
+
+            goodInput = false;
+            while (!goodInput) {
+                prnt("Desea verificar otra ruta? S/N");
+                input = scan.nextLine().toUpperCase();
+                if (input.equals("S")) {
+                    goodInput = true;
+                }
+                if (input.equals("N")) {
                     goodInput = true;
                     end = true;
                 }
-                if(input.equals("S")){
-                    goodInput = true;
-                }
             }
+            sep();
         }
         scan.close();
         prnt("Exitos en la distribucion. Adios.");
@@ -118,6 +137,7 @@ public class Rutas {
      * Saves the name and amount of cities in the given file
      */
     private void readCitiesFromFile() {
+        trayect = new ArrayList<>();
         try {
             FileReader r = new FileReader("guategrafo.txt");
             BufferedReader br = new BufferedReader(r);
@@ -271,7 +291,7 @@ public class Rutas {
     /**
      * Metodo para la obtencion de la ruta
      */
-    private boolean getRoute() {
+    private void getRoute() {
         prnt("Ingrese la ciudad de origen:");
         start = scan.nextLine();
         prnt("Ingrese la ciudad destino:");
@@ -280,7 +300,6 @@ public class Rutas {
         // TO CHECK IF CITIES EXIST
         if (!(ciudades.contains(start) && ciudades.contains(end))) {
             prnt("NO HAY UNA RUTA EXISTENTE PARA: " + start + " -> " + end);
-            return false;
         } else {
             prnt("PREPARANDO RUTA: " + start + " -> " + end);
             // MOSTRAR EL VLAOR DE LA DISTANCIA MÃ�S CORTA
@@ -288,8 +307,6 @@ public class Rutas {
             int posY = ciudades.indexOf(start);
             int posX = ciudades.indexOf(end);
             prnt("La distancia entre esas ciudades es de: " + distance[posX][posY] + "km");
-            sep();
-            return true;
         }
 
     }
@@ -298,7 +315,61 @@ public class Rutas {
      * Metodo para la modificaciob del grafo
      */
     private void modifyGraphs() {
+        prnt("Que desea hacer?");
+        prnt("1 | Interrupcion de trafico");
+        prnt("2 | Establecer conexion");
 
+        String input = scan.nextLine();
+        int option = -1;
+        boolean goodInput = false;
+        while (!goodInput) {
+            try {
+                option = Integer.parseInt(input);
+                if (option == 1 || option == 2) {
+                    goodInput = true;
+                }
+            } catch (Exception e) {
+                prnt("Ingrese una opcion valida");
+            }
+        }
         sep();
+
+        if (option == 1) { // ELIMINAR RUTA
+            prnt("REPORTANDO INTERRUPCION");
+            prnt("Ingrese la ciudad de origen:");
+            start = scan.nextLine();
+            prnt("Ingrese la ciudad destino:");
+            end = scan.nextLine();
+
+            if (ciudades.contains(start) && ciudades.contains(end)) {
+                int posY = ciudades.indexOf(start);
+                int posX = ciudades.indexOf(end);
+                int dist = distance[posX][posY];
+                if (dist != inf) {
+                    String search = start + " " + end + " " + dist;
+                    trayect.remove(search);
+                    rewriteFile();
+                } else {
+                    prnt("Esta ruta no existe. No se pueden reportar interrupcion de trafico.");
+                }
+            }
+        } else if (option == 2) { // CREAR RUTA
+            
+        }
+        sep();
+    }
+
+    private void rewriteFile() {
+        try {
+            FileWriter fw = new FileWriter("guategrafo.txt", false);
+
+            for (String line : trayect) {
+                fw.write(line + "\n");
+            }
+
+            fw.close();
+        } catch (Exception e) {
+            prnt("Error IO");
+        }
     }
 }
