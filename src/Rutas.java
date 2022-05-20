@@ -354,7 +354,27 @@ public class Rutas {
                 }
             }
         } else if (option == 2) { // CREAR RUTA
-            
+            prnt("ESTABLECIENDO CONEXION:");
+            prnt("Ingrese la ciudad de origen:");
+            start = scan.nextLine();
+            prnt("Ingrese la ciudad destino:");
+            end = scan.nextLine();
+
+            prnt("Ingrese la distancia entre ciudades: (En kilometros, solo el numero)");
+            int dist = inf;
+            String distInput = scan.nextLine();
+            goodInput = false;
+            while (!goodInput) {
+                try {
+                    dist = Integer.parseInt(distInput);
+                    goodInput = true;
+                } catch (Exception e) {
+                    prnt("Ingrese una opcion valida");
+                }
+            }
+            String newRoute = start + " " + end + " " + dist;
+            trayect.add(newRoute);
+            rewriteFile();
         }
         sep();
     }
