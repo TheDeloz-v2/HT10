@@ -17,7 +17,7 @@ public class Floyd {
     //-----PROPIEDADES-----
     private int[][] matrix;
     private int vertices;
-
+    int[][] dist;
     //-----METODOS-----
     /**
 	 * Metodo Constructor
@@ -26,6 +26,7 @@ public class Floyd {
     public Floyd(int[][] matrix){
         this.matrix = matrix;
         System.out.print(matrix.length);
+         dist= new int[vertices][vertices];
         findDistance();
     }
     
@@ -34,7 +35,6 @@ public class Floyd {
      * Source: Geeks4Geeks https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
      */
     public void findDistance(){
-        int[][] dist = new int[vertices][vertices];
         int i, j, k;
 
         for(i = 0; i < vertices; i++){
@@ -65,10 +65,10 @@ public class Floyd {
         {
             for (int j=0; j<vertices; ++j)
             {
-                if (matrix[i][j]== 999999)
+                if (dist[i][j]== 999999)
                     System.out.print("INF ");
                 else
-                    System.out.print(matrix[i][j]+"   ");
+                    System.out.print(dist[i][j]+"   ");
             }
             System.out.println();
         }

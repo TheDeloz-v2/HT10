@@ -54,12 +54,12 @@ public class Rutas {
         // Inicializador de matrices
         createDirectionMatrix();
         createDistMatrix();
-/*
+
         Floyd floyd = new Floyd(distance);
         sep();
         floyd.printDistances();
         sep();
-*/
+
         // generador de mapa de abreviaciones
         createAbbreviations();
 
@@ -254,7 +254,7 @@ public class Rutas {
         }
         else{
             prnt("PREPARANDO RUTA: " + start + " -> " + end);
-            // MOSTRAR EL VLAOR DE LA DISTANCIA MÁS CORTA
+            // MOSTRAR EL VLAOR DE LA DISTANCIA MÃ�S CORTA
             // MOSTRAR LAS CIUDADES POR LAS QUE PASA
             sep();
             scan.close();
