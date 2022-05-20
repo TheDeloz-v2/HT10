@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Vector;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,11 @@ class FloydTests {
                 {INF, INF, INF, 0}
               };
 		
-		assertEquals(finalgraph, fld.getMatrix());
+		assertEquals(finalgraph[0][0], fld.getMatrix()[0][0]);
+		assertEquals(finalgraph[1][1], fld.getMatrix()[1][1]);
+		assertEquals(finalgraph[2][2], fld.getMatrix()[2][2]);
+		assertEquals(finalgraph[3][3], fld.getMatrix()[3][3]);
+		
 	}
 
 }

@@ -332,7 +332,7 @@ public class Rutas {
     /**
      * Metodo para la modificaciob del grafo
      */
-    private void modifyGraphs() {
+    public void modifyGraphs() {
         prnt("Que desea hacer?");
         prnt("1 | Interrupcion de trafico");
         prnt("2 | Establecer conexion");
