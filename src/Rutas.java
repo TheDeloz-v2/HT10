@@ -55,22 +55,29 @@ public class Rutas {
         createDirectionMatrix();
         createDistMatrix();
 
-        Floyd floyd = new Floyd(distance);
-        sep();
-        floyd.printDistances();
-        sep();
-
         // generador de mapa de abreviaciones
         createAbbreviations();
-
+        
         // MATRIZ DE DISTANCIA
+        sep();
+        prnt("                Matriz de distancia   ");
+        sep();
         printMatrix(distance);
 
         // matriz de direccion
+        sep();
+        prnt("                Matriz de direccion   ");
+        sep();
         printMatrix(direction);
 
-        // MOSTRANDO AL USUARIO
+        Floyd floyd = new Floyd(distance);
         sep();
+        prnt("                 Matriz de Floyd   ");
+        sep();
+        printMatrix(floyd.getMatrix());
+        sep();
+
+        // MOSTRANDO AL USUARIO
         prnt("Bienvenido al Centro de Respuesta al COVID 19");
         prnt("Coordinemos la logistica de distribucion...");
         sep();
@@ -149,6 +156,7 @@ public class Rutas {
                 int posY = ciudades.indexOf(data[0]);
                 int posX = ciudades.indexOf(data[1]);
                 distance[posX][posY] = Integer.parseInt(data[2]);
+                distance[posY][posX] = Integer.parseInt(data[2]);
             }
         }
     }
