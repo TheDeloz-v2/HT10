@@ -264,6 +264,9 @@ public class Rutas {
             prnt("PREPARANDO RUTA: " + start + " -> " + end);
             // MOSTRAR EL VLAOR DE LA DISTANCIA MÃ�S CORTA
             // MOSTRAR LAS CIUDADES POR LAS QUE PASA
+            int posY = ciudades.indexOf(start);
+            int posX = ciudades.indexOf(end);
+            prnt("La distancia entre esas ciudades es de: " + distance[posX][posY] + "km");
             sep();
             scan.close();
         } 
