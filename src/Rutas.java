@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Vector;
 
 /**
  * Class Floyd
@@ -29,11 +30,13 @@ public class Rutas {
     private ArrayList<String> trayect;
     private HashMap<String, String> abrev_city;
     private HashMap<String, String> city_abrev;
+    private Vector<Integer> ruta;
     private int size;
     private final int inf = 999999;
 
     private String[][] direction;
     private int[][] distance;
+    private int[][] distanceFloyd;
 
     private String start;
     private String end;
@@ -80,8 +83,11 @@ public class Rutas {
         prnt("                Matriz de Floyd   ");
         sep();
         printMatrix(floyd.getMatrix());
+        distanceFloyd = floyd.getMatrix();
         sep();
-
+        //generador de rutas
+        floyd.inicializar();
+        floyd.floydRutas();
         // MOSTRANDO AL USUARIO
         prnt("Bienvenido al Centro de Respuesta al COVID 19");
         prnt("Coordinemos la logistica de distribucion...");
@@ -97,7 +103,10 @@ public class Rutas {
             createDistMatrix();
 
             getRoute();
-
+            //generar rutas
+            ruta = floyd.rutas(ciudades.indexOf(start),ciudades.indexOf(this.end));
+            getRutes();
+            
             sep();
             prnt("*CENTRO DEL GRAFO*");// CENTRO DEL GRAFO
             sep();
@@ -161,6 +170,7 @@ public class Rutas {
         }
 
         size = ciudades.size(); // SETS SIZE VARIABLE FOR ENVIRNOMENT
+        System.out.println(ciudades);
         direction = new String[size][size];
         distance = new int[size][size];
     }
@@ -306,9 +316,17 @@ public class Rutas {
             // MOSTRAR LAS CIUDADES POR LAS QUE PASA
             int posY = ciudades.indexOf(start);
             int posX = ciudades.indexOf(end);
-            prnt("La distancia entre esas ciudades es de: " + distance[posX][posY] + "km");
+            prnt("La distancia entre esas ciudades es de: " + distanceFloyd[posX][posY] + "km");
         }
 
+    }
+    private void getRutes() {
+    	int n= ruta.size();
+    	prnt("La más corta a seguir es:");
+        for (int i=0;i<n-1;i++) {
+        	System.out.print(ciudades.get(ruta.get(i))+"->");
+        }
+    	System.out.print(ciudades.get(ruta.get(n-1))+"\n");
     }
 
     /**

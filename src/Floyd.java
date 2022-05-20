@@ -1,3 +1,7 @@
+import java.util.Vector;
+
+import javax.imageio.event.IIOReadWarningListener;
+
 /**
  * Class Floyd
  * 
@@ -18,6 +22,9 @@ public class Floyd {
     private int[][] matrix;
     private int vertices;
     int[][] dist;
+    int[][] dis;
+    int[][] next;
+    private final int inf = 999999;
     //-----METODOS-----
     /**
 	 * Metodo Constructor
@@ -27,6 +34,8 @@ public class Floyd {
         this.matrix = matrix;
         vertices = matrix.length;
         dist= new int[vertices][vertices];
+        dis = new int[vertices][vertices];
+        next = new int [vertices][vertices];
         findDistance();
     }
     
@@ -52,6 +61,47 @@ public class Floyd {
                 }
             }
         }
+    }
+    
+    /* --------------------------------------- Area para las rutas----------------------------------- */
+    public void inicializar () {
+    	for(int i = 0; i < vertices; i++){
+            for(int j = 0; j < vertices; j++){
+                dis[i][j] = matrix[i][j];
+                if(matrix[i][j]==inf) {
+                	next[i][j]=-1;
+                }else {
+                	next[i][j]=j;
+                }
+            }
+        }
+    }
+    public void floydRutas() {
+    	for(int k=0;k<vertices;k++) {
+    		for(int i=0;i<vertices;i++) {
+    			for(int j=0;j<vertices;j++) {
+    				if(dis[i][k]==inf || dis[k][j]==inf) {
+    					continue;
+    				}
+    				if (dis[i][j]>dis[i][k]+dis[k][j]) {
+    					dis[i][j]=dis[i][k]+dis[k][j];
+    					next[i][j]=next[i][k];
+    				}
+    			}
+    		}
+    	}
+    }
+    public Vector<Integer> rutas(int a, int b){
+    	if(next[a][b]==-1) {
+    		return null;
+    	}
+    	Vector<Integer> ruta = new Vector<Integer>();
+    	ruta.add(a);
+    	while(a!=b) {
+    		a=next[a][b];
+    		ruta.add(a);
+    	}
+    	return ruta;
     }
 
     /**
