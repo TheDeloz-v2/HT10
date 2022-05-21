@@ -214,9 +214,10 @@ public class Rutas {
         }
     }
 
-    private int findCenter(int[][] matrix) {
+    private String findCenter(int[][] matrix) {
         int[] intArray = new int[ciudades.size()];
         int[] menores = new int[ciudades.size()];
+
         for (int x = 0; x < ciudades.size(); x++) {
             for (int y = 0; y < ciudades.size(); y++) {
                 int d = matrix[x][y];
@@ -224,21 +225,23 @@ public class Rutas {
                     intArray[y] = d;
                 }
             }
-            int menor= intArray[0];
+            int mayor= intArray[0];
             for(int f=1;f< intArray.length;f++) {
-                if (intArray[f]<menor) {
-                    menor= intArray[f];
+                if (intArray[f]>mayor) {
+                    mayor= intArray[f];
                     }
             }
-            menores[x] = menor;
+            menores[x] = mayor;
         }
         int menor2= menores[0];
+        int index = 0;
         for(int m=1;m< menores.length;m++) {
             if (intArray[m]<menor2) {
                 menor2= intArray[m];
+                index = m;
             }
         }
-        return menor2;
+        return ciudades.get(index);
     }
 
     /**
