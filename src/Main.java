@@ -19,7 +19,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Rutas r = new Rutas("pruebaGrafo.txt");
+		Rutas r = new Rutas("guategrafo.txt");
 		r.execute();
 	}
 }

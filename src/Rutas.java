@@ -2,7 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
@@ -110,7 +112,7 @@ public class Rutas {
             }
             sep();
             prnt("*CENTRO DEL GRAFO*");// CENTRO DEL GRAFO
-            prnt("El centro es: "+findCenter(distance));
+            prnt("El centro es: "+findCenter(distanceFloyd));
             sep();
 
             option3();
@@ -216,36 +218,27 @@ public class Rutas {
 
     private String findCenter(int[][] matrix) {
         int[] intArray = new int[ciudades.size()];
-        int[] menores = new int[ciudades.size()];
+        int[] mayores = new int[ciudades.size()];
 
-        for (int x = 0; x < ciudades.size(); x++) {
-            for (int y = 0; y < ciudades.size(); y++) {
-                int d = matrix[x][y];
-                if (d != inf) {
-                    intArray[y] = d;
-                }
+        for(int x=0;x<ciudades.size();x++) {
+        	for(int y=0;y<ciudades.size();y++) {
+            	intArray[y]=matrix[x][y];
             }
-            int mayor= intArray[0];
-            for(int f=1;f< intArray.length;f++) {
-                if (intArray[f]>mayor) {
-                    mayor= intArray[f];
-                    }
-            }
-            menores[x] = mayor;
+        	Arrays.sort(intArray);
+        	mayores[x]=intArray[intArray.length-1];
         }
-        int menor2= menores[0];
-        int index = 0;
-        for(int m=1;m< menores.length;m++) {
-            if (intArray[m]<menor2) {
-                menor2= intArray[m];
-            }
+        int[] mayores2 = new int[ciudades.size()]; 
+        for(int i=0;i<mayores2.length;i++) {
+        	mayores2[i]=mayores[i];
         }
-        for(int a=0;a<menores.length;a++){
-            if(menor2 == menores[a]){
-                index = a;
-            }
+        Arrays.sort(mayores);
+        int index=0;
+        for(int i=0;i<mayores2.length;i++) {
+        	if(mayores[0]==mayores2[i]) {
+        		index=i;
+        	}
         }
-        return ciudades.get(index-1);
+        return ciudades.get(index);
     }
 
     /**
