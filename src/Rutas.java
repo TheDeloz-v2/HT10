@@ -164,7 +164,6 @@ public class Rutas {
         }
 
         size = ciudades.size(); // SETS SIZE VARIABLE FOR ENVIRNOMENT
-        System.out.println(ciudades);
         direction = new String[size][size];
         distance = new int[size][size];
     }
@@ -321,6 +320,11 @@ public class Rutas {
      * Metodo para la obtencion de la ruta
      */
     public boolean getRoute() {
+        System.out.println("Las ciudades disponibles son: ");
+        for (int i = 0; i < ciudades.size(); i++) {
+        	System.out.println(ciudades.get(i));
+        }
+        sep();
         prnt("Ingrese la ciudad de origen:");
         start = scan.nextLine();
         prnt("Ingrese la ciudad destino:");
