@@ -215,11 +215,11 @@ public class Rutas {
     }
 
     private int findCenter(int[][] matrix) {
-        int[] intArray = new int[matrix.length];
-        int[] menores = new int[matrix.length];
-        for (int x = 0; x < ciudades.size() + 1; x++) {
-            for (int y = 0; y < ciudades.size() + 1; y++) {
-                int d = matrix[x - 1][y - 1];
+        int[] intArray = new int[ciudades.size()];
+        int[] menores = new int[ciudades.size()];
+        for (int x = 0; x < ciudades.size(); x++) {
+            for (int y = 0; y < ciudades.size(); y++) {
+                int d = matrix[x][y];
                 if (d != inf) {
                     intArray[y] = d;
                 }
