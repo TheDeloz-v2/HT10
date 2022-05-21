@@ -110,6 +110,7 @@ public class Rutas {
             }
             sep();
             prnt("*CENTRO DEL GRAFO*");// CENTRO DEL GRAFO
+            prnt("El centro es: "+findCenter(distance));
             sep();
 
             option3();
@@ -211,6 +212,33 @@ public class Rutas {
             abrev_city.put(ciudades.get(i).substring(0, 1), ciudades.get(i));
             city_abrev.put(ciudades.get(i), ciudades.get(i).substring(0, 1));
         }
+    }
+
+    private int findCenter(int[][] matrix) {
+        int[] intArray = new int[matrix.length];
+        int[] menores = new int[matrix.length];
+        for (int x = 0; x < ciudades.size() + 1; x++) {
+            for (int y = 0; y < ciudades.size() + 1; y++) {
+                int d = matrix[x - 1][y - 1];
+                if (d != inf) {
+                    intArray[y] = d;
+                }
+            }
+            int menor= intArray[0];
+            for(int f=1;f< intArray.length;f++) {
+                if (intArray[f]<menor) {
+                    menor= intArray[f];
+                    }
+            }
+            menores[x] = menor;
+        }
+        int menor2= menores[0];
+        for(int m=1;m< menores.length;m++) {
+            if (intArray[m]<menor2) {
+                menor2= intArray[m];
+            }
+        }
+        return menor2;
     }
 
     /**
@@ -441,4 +469,5 @@ public class Rutas {
             prnt("Error IO");
         }
     }
+    
 }
