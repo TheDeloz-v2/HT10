@@ -238,10 +238,14 @@ public class Rutas {
         for(int m=1;m< menores.length;m++) {
             if (intArray[m]<menor2) {
                 menor2= intArray[m];
-                index = m;
             }
         }
-        return ciudades.get(index);
+        for(int a=0;a<menores.length;a++){
+            if(menor2 == menores[a]){
+                index = a;
+            }
+        }
+        return ciudades.get(index-1);
     }
 
     /**
