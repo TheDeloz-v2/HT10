@@ -26,6 +26,7 @@ public class Rutas {
     // -----PROPIEDADES-----
     private Scanner scan;
     private String fileName;
+    Floyd floyd;
 
     private ArrayList<String> ciudades;
     private ArrayList<String> trayect;
@@ -54,12 +55,7 @@ public class Rutas {
         trayect = new ArrayList<String>();
         abrev_city = new HashMap<String, String>();
         city_abrev = new HashMap<String, String>();
-    }
 
-    /**
-     * Metodo de ejecucion
-     */
-    public void execute() {
         readCitiesFromFile();
         // Inicializador de matrices
         createDirectionMatrix();
@@ -68,6 +64,18 @@ public class Rutas {
         // generador de mapa de abreviaciones
         createAbbreviations();
 
+        // FLOYD
+        floyd = new Floyd(distance);
+        distanceFloyd = floyd.getMatrix();
+        floyd.inicializar();
+        floyd.floydRutas();
+
+    }
+
+    /**
+     * Metodo de ejecucion
+     */
+    public void execute() {
         // MATRIZ DE DISTANCIA
         sep();
         prnt("                Matriz de distancia   ");
@@ -80,16 +88,11 @@ public class Rutas {
         sep();
         printMatrix(direction);
 
-        Floyd floyd = new Floyd(distance);
         sep();
         prnt("                Matriz de Floyd   ");
         sep();
-        printMatrix(floyd.getMatrix());
-        distanceFloyd = floyd.getMatrix();
+        printMatrix(distanceFloyd);
         sep();
-        // generador de rutas
-        floyd.inicializar();
-        floyd.floydRutas();
         // MOSTRANDO AL USUARIO
         prnt("Bienvenido al Centro de Respuesta al COVID 19");
         prnt("Coordinemos la logistica de distribucion...");
@@ -388,13 +391,9 @@ public class Rutas {
         String newRoute = start + " " + end + " " + distance;
         trayect.add(newRoute);
         rewriteFile();
-
-        readCitiesFromFile();
-        createDirectionMatrix();
-        createDistMatrix();
     }
 
-    public boolean deleteRoute(String start, String end) {
+    public void deleteRoute(String start, String end) {
         if (ciudades.contains(start) && ciudades.contains(end)) {
             int posY = ciudades.indexOf(start);
             int posX = ciudades.indexOf(end);
@@ -403,18 +402,20 @@ public class Rutas {
                 String search = start + " " + end + " " + dist;
                 trayect.remove(search);
                 rewriteFile();
-
-                readCitiesFromFile();
-                createDirectionMatrix();
-                createDistMatrix();
-
-                return true;
             }
-            return false;
         } else {
             prnt("Esta ruta no existe. No se pueden reportar interrupcion de trafico.");
-            return false;
         }
+    }
+
+    public boolean routeExists(String start, String end) {
+        if (ciudades.contains(start) && ciudades.contains(end)) {
+            int posY = ciudades.indexOf(start);
+            int posX = ciudades.indexOf(end);
+            if (distance[posX][posY] != inf)
+                return true;
+        }
+        return false;
     }
 
     private void rewriteFile() {
@@ -426,6 +427,16 @@ public class Rutas {
             }
 
             fw.close();
+
+            readCitiesFromFile();
+            createDirectionMatrix();
+            createDistMatrix();
+            createAbbreviations();
+            floyd = new Floyd(distance);
+            floyd.inicializar();
+            floyd.floydRutas();
+            distanceFloyd = floyd.getMatrix();
+
         } catch (Exception e) {
             prnt("Error IO");
         }

@@ -7,6 +7,7 @@ class RutasTests {
 	@Test
 	void modifyTest() {
 		Rutas rts = new Rutas("pruebaGrafo.txt");
+		rts.createRoute("Hola", "Adios", 69);
+		assertEquals(true,  rts.routeExists("Hola", "Adios"));
 	}
-
 }
